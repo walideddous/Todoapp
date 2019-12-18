@@ -9,16 +9,14 @@ class TodoLIst extends Component {
         this.state ={
             items : []
         };
-
-        this.addItem = this.addItem.bind(this);
-        this.deleteItem=this.deleteItem.bind(this);
     }
 
-    addItem(e){
+    addItem =(e) =>{
         if (this._inputElement.value!==""){
             var newItem ={
                 text : this._inputElement.value,
-                key : Date.now()
+                key : Date.now(),
+                button : true
             };
             this.setState ((prevState) => {
                 return {
@@ -31,16 +29,14 @@ class TodoLIst extends Component {
         e.preventDefault();
     }
 
-    deleteItem(key){
-        var filteredItems=this.state.items.filter(function(item){
-            return (item.key !== key)
-        });
-        this.setState({
-            items:filteredItems
-        });
-    }
+ deleteitem = ( key) => {
+     this.setState({ items : this.state.items.filter( item => {return (item.key!== key)})});
+ }
 
-    render (){
+ changeColor = (key ) => {
+     this.setState({ items : this.state.items.map(el => el.key===key ? {...el,button:false}:el)});
+ }
+    render () {
         return (
             <div className="todoListMain">
                 <div className="header">
@@ -48,10 +44,11 @@ class TodoLIst extends Component {
                         <input ref={(a)=> this._inputElement = a} placeholder="enter tasks"></input>
                         <button type="submit">Add</button>
                     </form>
+                    <TodoItems entries={this.state.items} changeColor={this.changeColor} delete={this.deleteitem} />
                 </div>
-                <TodoItems entries={this.state.items} delete={this.deleteItem} />
             </div>
         );
+        
     }
 }
 

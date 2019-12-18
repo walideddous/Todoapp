@@ -1,36 +1,23 @@
 import React, { Component } from 'react';
 import FlipMove from 'react-flip-move';
+import "./TodoItems.css";
+
 
 class TodoItems extends Component {
     constructor(props){
-        super(props);
-
-        this.state = {
-            bgColor: ""
-        };
-        
-        this.createTasks=this.createTasks.bind(this);
-        this.delete=this.delete.bind(this);
-        this.changecolor=this.changecolor.bind(this);
+        super(props);   
     }
 
-    changecolor = (e) => {
-        this.setState({
-            bgColor: "red"
-        });
-    }
+    createTasks = (item) => <li className={item.button ? "couleurrouge": "couleurancienne"} onClick={()=>this.changeColor(item.key)} onDoubleClick={()=>this.delete(item.key)} key={item.key}>{item.text}</li>
+    
+    changeColor = (key) => this.props.changeColor(key);
 
-    createTasks = (item) => <li onClick={this.changecolor} onDoubleClick={()=>this.delete(item.key)} key={item.key}>{item.text}</li>;
-    delete = (key) =>  this.props.delete(key);
-    
-    
+    delete = (key) => this.props.delete(key);
+
     render () {
-        var todoEntries = this.props.entries;
-        var listItems = todoEntries.map(this.createTasks);
-
         return (
             <ul className="theList">
-            <FlipMove duration={250} easing="ease-out">{listItems}</FlipMove>
+            <FlipMove duration={250} easing="ease-out">{this.props.entries.map(this.createTasks)}</FlipMove>
             </ul>
         );
     }
