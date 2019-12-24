@@ -1,6 +1,33 @@
 .couleurrouge{
     background-color: rgba(255, 255, 255, .5); 
+    width: 200px;
 }
 .couleurancienne{
     background-color: purple;
+    width: 200px;
+}
+.theList input{
+    color: #333;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    list-style: none;
+    transition: background-color .5s ease-out;
+}
+
+.theList input:hover{
+    background-color: pink;
+    cursor: pointer;
+}
+
+ul {
+    padding: 0px;
+}
+.addetitems{
+    display: flex;
+}
+.btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,55 +1,50 @@
-import React , { Component } from 'react';
-import TodoItems from './TodoItems';
+import React, { Component }  from 'react';
+import { addnewitem } from '../actions'
+import { connect } from 'react-redux';
 import './TodoList.css';
 
-class TodoLIst extends Component {
-    constructor(props){
-        super(props);
+const mapDispatchToProps = (dispatch) =>{
+  return {
+    addnewitem: items => dispatch(addnewitem(items))
+  }
+}
 
-        this.state ={
-            items : []
-        };
-    }
-
-    addItem =(e) =>{
-        if (this._inputElement.value!==""){
-            var newItem ={
-                text : this._inputElement.value,
-                key : Date.now(),
-                button : true
-            };
-            this.setState ((prevState) => {
-                return {
-                items: prevState.items.concat(newItem)
-            };
-            });
-        }
-        this._inputElement.value="";
-
-        e.preventDefault();
-    }
-
- deleteitem = ( key) => {
-     this.setState({ items : this.state.items.filter( item => {return (item.key!== key)})});
- }
-
- changeColor = (key ) => {
-     this.setState({ items : this.state.items.map(el => el.key===key ? {...el,button:false}:el)});
- }
-    render () {
-        return (
-            <div className="todoListMain">
-                <div className="header">
-                    <form onSubmit={this.addItem}>
-                        <input ref={(a)=> this._inputElement = a} placeholder="enter tasks"></input>
-                        <button type="submit">Add</button>
-                    </form>
-                    <TodoItems entries={this.state.items} changeColor={this.changeColor} delete={this.deleteitem} />
-                </div>
-            </div>
-        );
-        
+class connectedTodoList extends Component {
+  state = {
+    input: ""
+  }
+  addItem =(e) =>{
+    const { input } = this.state;
+    e.preventDefault()
+    if (input){
+      this.props.addnewitem({ 
+        text : this.state.input,
+        key : Date.now(),
+        button : true,
+        edit : false})
+      this.setState({input:""})
     }
 }
 
-export default TodoLIst;
+  handlechange = (e)=>{
+    const {value}=e.target;
+    this.setState({input : value})
+  }
+
+  render() { 
+    return ( 
+      <form onSubmit={this.addItem}>
+      <input
+        onChange={this.handlechange}
+        placeholder="enter tasks"
+        value = {this.state.input}
+      ></input>
+      <button type="submit">Add</button>
+    </form>
+     );
+  }
+}
+
+const TodoList = connect(null,mapDispatchToProps)(connectedTodoList)
+
+export default TodoList
